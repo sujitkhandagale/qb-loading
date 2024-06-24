@@ -10,6 +10,8 @@ files {
   'html/*'
 }
 
+client_script 'client.lua'
+
 loadscreen {
   'html/index.html'
 }

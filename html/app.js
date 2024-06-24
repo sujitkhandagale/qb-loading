@@ -1,108 +1,59 @@
-const { ref } = Vue
+// script.js
 
-// Customize language for dialog menus and carousels here
+const audio = document.getElementById('audio');
+const playPauseButton = document.getElementById('play-pause');
+const volumeDownButton = document.getElementById('volume-down');
+const volumeUpButton = document.getElementById('volume-up');
+const playIcon = '<i class="fas fa-play"></i>';
+const pauseIcon = '<i class="fas fa-pause"></i>';
 
-const load = Vue.createApp({
-  setup () {
-    return {
-      CarouselText1: 'You can add/remove items, vehicles, jobs & gangs through the shared folder.',
-      CarouselSubText1: 'Photo captured by: Markyoo#8068',
-      CarouselText2: 'Adding additional player data can be achieved by modifying the qb-core player.lua file.',
-      CarouselSubText2: 'Photo captured by: ihyajb#9723',
-      CarouselText3: 'All server-specific adjustments can be made in the config.lua files throughout the build.',
-      CarouselSubText3: 'Photo captured by: FLAPZ[INACTIV]#9925',
-      CarouselText4: 'For additional support please join our community at discord.gg/qbcore',
-      CarouselSubText4: 'Photo captured by: Robinerino#1312',
-
-      DownloadTitle: 'Downloading QBCore Server',
-      DownloadDesc: "Hold tight while we begin downloading all the resources/assets required to play on QBCore Server. \n\nAfter download has been finished successfully, you'll be placed into the server and this screen will disappear. Please don't leave or turn off your PC. ",
-
-      SettingsTitle: 'Settings',
-      AudioTrackDesc1: 'When disabled the current audio-track playing will be stopped.',
-      AutoPlayDesc2: 'When disabled carousel images will stop cycling and remain on the last shown.',
-      PlayVideoDesc3: 'When disabled video will stop playing and remain paused.',
-
-      KeybindTitle: 'Default Keybinds',
-      Keybind1: 'Open Inventory',
-      Keybind2: 'Cycle Proximity',
-      Keybind3: 'Open Phone',
-      Keybind4: 'Toggle Seat Belt',
-      Keybind5: 'Open Target Menu',
-      Keybind6: 'Radial Menu',
-      Keybind7: 'Open Hud Menu',
-      Keybind8: 'Talk Over Radio',
-      Keybind9: 'Open Scoreboard',
-      Keybind10: 'Vehicle Locks',
-      Keybind11: 'Toggle Engine',
-      Keybind12: 'Pointer Emote',
-      Keybind13: 'Keybind Slots',
-      Keybind14: 'Hands Up Emote',
-      Keybind15: 'Use Item Slots',
-      Keybind16: 'Cruise Control',
-
-      firstap: ref(true),
-      secondap: ref(true),
-      thirdap: ref(true),
-      firstslide: ref(1),
-      secondslide: ref('1'),
-      thirdslide: ref('5'),
-      audioplay: ref(true),
-      playvideo: ref(true),
-      download: ref(true),
-      settings: ref(false),
+// Initialize play/pause button based on autoplay
+window.onload = () => {
+    if (!audio.paused) {
+        playPauseButton.innerHTML = pauseIcon;
     }
-  }
-})
-
-load.use(Quasar, { config: {} })
-load.mount('#loading-main')
-
-var audio = document.getElementById("audio");
-audio.volume = 0.05;
-
-function audiotoggle() {
-    var audio = document.getElementById("audio");
-    if (audio.paused) {
-        audio.play();
-    } else {
-        audio.pause();
-    }
-}
-
-function videotoggle() {
-    var video = document.getElementById("video");
-    if (video.paused) {
-        video.play();
-    } else {
-        video.pause();
-    }
-}
-
-let count = 0;
-let thisCount = 0;
-
-const handlers = {
-    startInitFunctionOrder(data) {
-        count = data.count;
-    },
-
-    initFunctionInvoking(data) {
-        document.querySelector(".thingy").style.left = "0%";
-        document.querySelector(".thingy").style.width = (data.idx / count) * 100 + "%";
-    },
-
-    startDataFileEntries(data) {
-        count = data.count;
-    },
-
-    performMapLoadFunction(data) {
-        ++thisCount;
-
-        document.querySelector(".thingy").style.left = "0%";
-        document.querySelector(".thingy").style.width = (thisCount / count) * 100 + "%";
-    },
 };
 
-window.addEventListener("message", function (e) {
-    (handlers[e.data.eventName] || function () {})(e.data);
+// Play/Pause functionality
+playPauseButton.addEventListener('click', () => {
+    if (audio.paused) {
+        audio.play();
+        playPauseButton.innerHTML = pauseIcon;
+    } else {
+        audio.pause();
+        playPauseButton.innerHTML = playIcon;
+    }
 });
+
+// Volume down functionality
+volumeDownButton.addEventListener('click', () => {
+    audio.volume = Math.max(audio.volume - 0.1, 0);
+});
+
+// Volume up functionality
+volumeUpButton.addEventListener('click', () => {
+    audio.volume = Math.min(audio.volume + 0.1, 1);
+});
+
+// Update play/pause button icon on audio end
+audio.addEventListener('ended', () => {
+    playPauseButton.innerHTML = playIcon;
+});
+
+// play song automatically when page loads
+
+
+// audio list play song randomly
+const audioList = [
+    'https://cdn.pixabay.com/audio/2024/06/14/audio_0e2636099d.mp3',
+    "https://cdn.pixabay.com/audio/2024/06/13/audio_8822cea290.mp3",
+    "https://cdn.pixabay.com/audio/2024/03/22/audio_1ef53377ba.mp3"
+];
+
+const randomAudio = audioList[Math.floor(Math.random() * audioList.length)];
+audio.src = randomAudio;
+
+// show song name
+const songName = document.getElementById('song-name');
+songName.innerHTML = randomAudio;
+
